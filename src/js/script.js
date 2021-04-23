@@ -1,35 +1,37 @@
 function main() {
   const { gl, meshProgramInfo } = initializeWorld();
+  
+  const shapeTranslation = [0, 0, 0];
 
-  const cubeTranslation = [0, 0, 0];
-
-  const cubeBufferInfo = flattenedPrimitives.createCubeBufferInfo(gl, 20);
+  const shapeBufferInfo = generateShape(gl, m4);
 
   const cubeVAO = twgl.createVAOFromBufferInfo(
     gl,
     meshProgramInfo,
-    cubeBufferInfo,
+    shapeBufferInfo,
   );
 
   var fieldOfViewRadians = degToRad(60);
 
-  const cubeUniforms = {
-    u_colorMult: [1, 0.5, 0.5, 1],
+  const shapeUniforms = {
+    u_colorMult: [Math.random(), Math.random(), Math.random(), 1],
     u_matrix: m4.identity(),
   };
 
-  function computeMatrix(viewProjectionMatrix, translation, yRotation) {
+  function computeMatrix(viewProjectionMatrix, translation, xRotation, yRotation, /*axisRotation, axisInput*/) {
     var matrix = m4.translate(
       viewProjectionMatrix,
       translation[0],
       translation[1],
       translation[2],
     );
+    //matrix = m4.axisRotation(axisInput, axisRotation);
+    matrix = m4.xRotate(matrix, xRotation);
     return m4.yRotate(matrix, yRotation);
   }
 
   loadGUI();
-  
+
   function render() {
     twgl.resizeCanvasToDisplaySize(gl.canvas);
 
@@ -58,16 +60,19 @@ function main() {
     // Setup all the needed attributes.
     gl.bindVertexArray(cubeVAO);
 
-    cubeUniforms.u_matrix = computeMatrix(
+    shapeUniforms.u_matrix = computeMatrix(
       viewProjectionMatrix,
-      cubeTranslation,
-      config.rotate,
+      shapeTranslation,
+      xRotation['X Rotation'],
+      yRotation['Y Rotation'],
+      /*axisRotation['Axis Rotation'],
+      axisInput['Axis']*/
     );
 
     // Set the uniforms we just computed
-    twgl.setUniforms(meshProgramInfo, cubeUniforms);
+    twgl.setUniforms(meshProgramInfo, shapeUniforms);
 
-    twgl.drawBufferInfo(gl, cubeBufferInfo);
+    twgl.drawBufferInfo(gl, shapeBufferInfo);
 	requestAnimationFrame(render);
   }
      
