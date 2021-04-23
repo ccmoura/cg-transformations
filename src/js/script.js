@@ -18,15 +18,29 @@ function main() {
     u_matrix: m4.identity(),
   };
 
-  function computeMatrix(viewProjectionMatrix, translation, xRotation, yRotation, /*axisRotation, axisInput*/) {
+  function computeMatrix(
+    viewProjectionMatrix, 
+    translation, 
+    xRotation, 
+    yRotation,
+     zRotation,
+     xTranslation,
+     yTranslation,
+     zTranslation 
+     /*axisRotation,
+     axisInput*/
+     ) {
+       console.log(translation)
     var matrix = m4.translate(
       viewProjectionMatrix,
-      translation[0],
-      translation[1],
-      translation[2],
+      xTranslation,
+      yTranslation,
+      zTranslation,
     );
+
     //matrix = m4.axisRotation(axisInput, axisRotation);
     matrix = m4.xRotate(matrix, xRotation);
+    matrix = m4.zRotate(matrix, zRotation);
     return m4.yRotate(matrix, yRotation);
   }
 
@@ -43,7 +57,7 @@ function main() {
     var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
     // Compute the camera's matrix using look at.
-    var cameraPosition = [0, 0, 100];
+    var cameraPosition = [0, 0, 200];
     var target = [0, 0, 0];
     var up = [0, 1, 0];
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
@@ -65,6 +79,10 @@ function main() {
       shapeTranslation,
       xRotation['X Rotation'],
       yRotation['Y Rotation'],
+      zRotation['Z Rotation'],
+      xTranslation['X'],
+      yTranslation['Y'],
+      zTranslation['Z']
       /*axisRotation['Axis Rotation'],
       axisInput['Axis']*/
     );
