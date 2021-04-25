@@ -26,22 +26,26 @@ function main() {
      zRotation,
      xTranslation,
      yTranslation,
-     zTranslation 
-     /*axisRotation,
-     axisInput*/
+     zTranslation,
+     xScale,
+     yScale,
+     zScale
      ) {
-       console.log(translation)
+
+    let scaled = m4.scale(viewProjectionMatrix, xScale, yScale, zScale);
+
     var matrix = m4.translate(
-      viewProjectionMatrix,
+      scaled,
       xTranslation,
       yTranslation,
       zTranslation,
     );
 
-    //matrix = m4.axisRotation(axisInput, axisRotation);
     matrix = m4.xRotate(matrix, xRotation);
+    matrix = m4.yRotate(matrix, yRotation);
     matrix = m4.zRotate(matrix, zRotation);
-    return m4.yRotate(matrix, yRotation);
+   
+    return matrix
   }
 
   loadGUI();
@@ -57,7 +61,7 @@ function main() {
     var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
     // Compute the camera's matrix using look at.
-    var cameraPosition = [0, 0, 200];
+    var cameraPosition = [0, 0, (100 - zoom['Zoom']) * 10];
     var target = [0, 0, 0];
     var up = [0, 1, 0];
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
@@ -77,14 +81,16 @@ function main() {
     shapeUniforms.u_matrix = computeMatrix(
       viewProjectionMatrix,
       shapeTranslation,
-      xRotation['X Rotation'],
-      yRotation['Y Rotation'],
-      zRotation['Z Rotation'],
+      xRotation['X'],
+      yRotation['Y'],
+      zRotation['Z'],
       xTranslation['X'],
       yTranslation['Y'],
-      zTranslation['Z']
-      /*axisRotation['Axis Rotation'],
-      axisInput['Axis']*/
+      zTranslation['Z'],
+      xScale['X'],
+      yScale['Y'],
+      zScale['Z'],
+      zoom['Zoom']
     );
 
     // Set the uniforms we just computed
