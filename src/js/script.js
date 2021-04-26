@@ -1,11 +1,9 @@
-function main() {
-  const { gl, meshProgramInfo } = initializeWorld();
-  
-  const shapeTranslation = [0, 0, 0];
+const { gl, meshProgramInfo } = initializeWorld();
 
-  const shapeBufferInfo = generateShape(gl, m4);
+const transformations = [];
 
-  const cubeVAO = twgl.createVAOFromBufferInfo(
+function main(shapeBufferInfo, shapeUniforms, index) {
+  const VAO = twgl.createVAOFromBufferInfo(
     gl,
     meshProgramInfo,
     shapeBufferInfo,
@@ -13,14 +11,8 @@ function main() {
 
   var fieldOfViewRadians = degToRad(60);
 
-  const shapeUniforms = {
-    u_colorMult: [Math.random(), Math.random(), Math.random(), 1],
-    u_matrix: m4.identity(),
-  };
-
   function computeMatrix(
     viewProjectionMatrix, 
-    translation, 
     xRotation, 
     yRotation,
      zRotation,
@@ -48,7 +40,7 @@ function main() {
     return matrix
   }
 
-  loadGUI();
+  loadGUI(index, m4);
 
   function render() {
     twgl.resizeCanvasToDisplaySize(gl.canvas);
@@ -61,7 +53,7 @@ function main() {
     var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
     // Compute the camera's matrix using look at.
-    var cameraPosition = [0, 0, (100 - zoom['Zoom']) * 10];
+    var cameraPosition = [xCamera['X'], yCamera['Y'], (100 - zoom['Zoom']) * 10];
     var target = [0, 0, 0];
     var up = [0, 1, 0];
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
@@ -76,31 +68,57 @@ function main() {
     // ------ Draw the cube --------
 
     // Setup all the needed attributes.
-    gl.bindVertexArray(cubeVAO);
+    gl.bindVertexArray(VAO);
 
     shapeUniforms.u_matrix = computeMatrix(
       viewProjectionMatrix,
-      shapeTranslation,
-      xRotation['X'],
-      yRotation['Y'],
-      zRotation['Z'],
-      xTranslation['X'],
-      yTranslation['Y'],
-      zTranslation['Z'],
-      xScale['X'],
-      yScale['Y'],
-      zScale['Z'],
-      zoom['Zoom']
+      transformations[index].xRotation['X'],
+      transformations[index].yRotation['Y'],
+      transformations[index].zRotation['Z'],
+      transformations[index].xTranslation['X'],
+      transformations[index].yTranslation['Y'],
+      transformations[index].zTranslation['Z'],
+      transformations[index].xScale['X'],
+      transformations[index].yScale['Y'],
+      transformations[index].zScale['Z'],
     );
 
     // Set the uniforms we just computed
     twgl.setUniforms(meshProgramInfo, shapeUniforms);
 
     twgl.drawBufferInfo(gl, shapeBufferInfo);
-	requestAnimationFrame(render);
+  	requestAnimationFrame(render);
   }
      
   requestAnimationFrame(render);
 }
 
-main();
+const gui = new dat.GUI();
+
+loadCameraGui()
+var obj = { 'Add shape': () => {
+  transformations.push({
+    xRotation: { 'X': degToRad(1) },
+    yRotation: { 'Y': degToRad(1) },
+    zRotation: { 'Z': degToRad(1) },
+    xTranslation: { 'X': degToRad(1) },
+    yTranslation: { 'Y': degToRad(1) },
+    zTranslation: { 'Z': degToRad(1) },
+    xScale: { 'X': 1 },
+    yScale: { 'Y': 1 },
+    zScale: { 'Z': 1 },
+  });
+
+  main(
+    generateShape(gl, m4), 
+    {
+      u_colorMult: [Math.random(), Math.random(), Math.random(), 1],
+      u_matrix: m4.identity(),
+    },
+    transformations.length-1
+  )
+  }
+};
+
+gui.add(obj, 'Add shape');
+
