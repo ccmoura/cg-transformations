@@ -2,17 +2,27 @@ const zoom = { 'Zoom': 80 }
 const xCamera = { 'X': 0 }
 const yCamera = { 'Y': 0 }
 
+const xCameraRotation = { 'X': 0 }
+const yCameraRotation = { 'Y': 0 }
+const zCameraRotation = { 'Z': 0 }
+
 var cameraFunctions = { 'Add camera': () => {} };
 
 const loadCameraGui = () => {
   const gui = new dat.GUI();
 
   gui.add(cameraFunctions, 'Add camera');
-  var folder1 = gui.addFolder('Camera');
-    folder1.close();
-    folder1.add(xCamera, "X", -canvas.width * 2, canvas.width * 2, 1)
-    folder1.add(yCamera, "Y", -canvas.width * 2, canvas.width * 2, 1)
-    folder1.add(zoom, "Zoom", 0, 100, 1);
+  var folder1 = gui.addFolder('Translations');
+  folder1.close();
+  folder1.add(xCamera, "X", -canvas.width * 2, canvas.width * 2, 1)
+  folder1.add(yCamera, "Y", -canvas.width * 2, canvas.width * 2, 1)
+  folder1.add(zoom, "Zoom", 0, 100, 1);
+
+  var folder2 = gui.addFolder('Rotations');
+  folder2.close();
+  folder2.add(xCameraRotation, "X", -100, 100, 1)
+  folder2.add(yCameraRotation, "Y", -100, 100, 1)
+  folder2.add(zCameraRotation, "Z", -100, 100, 1);
 }
 
 const loadGUI = (index) => {

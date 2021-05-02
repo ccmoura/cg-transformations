@@ -54,8 +54,8 @@ function main(shapeBufferInfo, shapeUniforms, index) {
 
     // Compute the camera's matrix using look at.
     var cameraPosition = [xCamera['X'], yCamera['Y'], (100 - zoom['Zoom']) * 10];
-    var target = [0, 0, 0];
-    var up = [0, 1, 0];
+    var target = [yCameraRotation['Y'], xCameraRotation['X'], 0];
+    var up = [zCameraRotation['Z'], 1, 0];
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
 
     // Make a view matrix from the camera matrix.
