@@ -6,7 +6,9 @@ const xCameraRotation = { 'X': 0 }
 const yCameraRotation = { 'Y': 0 }
 const zCameraRotation = { 'Z': 0 }
 
-var cameraFunctions = { 'Add camera': () => {} };
+const followShape = {'Follow Shape': false }
+
+var cameraFunctions = { 'Add camera': () => {}  };
 
 const loadCameraGui = () => {
   const gui = new dat.GUI();
@@ -36,8 +38,8 @@ const loadGUI = (index) => {
 
   var folder2 = gui.addFolder('Translations');
   folder2.close();
-  folder2.add(transformations[index].xTranslation, "X", -canvas.width / 2, canvas.width / 2, 0.5);
-  folder2.add(transformations[index].yTranslation, "Y", -canvas.height / 2, canvas.height / 2, 0.5);
+  folder2.add(transformations[index].xTranslation, "X", -canvas.width * 2, canvas.width * 2, 1);
+  folder2.add(transformations[index].yTranslation, "Y", -canvas.height * 2, canvas.height * 2, 1);
   folder2.add(transformations[index].zTranslation, "Z", -100, 100, 0.5);
 
   var folder3 = gui.addFolder('Scales');
@@ -46,5 +48,10 @@ const loadGUI = (index) => {
   folder3.add(transformations[index].yScale, "Y", 1, 10, 0.5);
   folder3.add(transformations[index].zScale, "Z", 1, 10, 0.5);
 
-  
+  gui.add({'Look At': () => {
+    xCameraRotation['X'] = transformations[index].yTranslation['Y'];
+    yCameraRotation['Y'] = transformations[index].xTranslation['X'];
+  }}, "Look At");
+
+  gui.add(followShape, "Follow Shape");  
 };
