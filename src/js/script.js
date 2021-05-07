@@ -21,7 +21,11 @@ function main(shapeBufferInfo, shapeUniforms, index) {
      zTranslation,
      xScale,
      yScale,
-     zScale
+     zScale,
+     p1Rotation,
+     p2Rotation,
+     p3Rotation,
+     angle
      ) {
 
     let scaled = m4.scale(viewProjectionMatrix, xScale, yScale, zScale);
@@ -36,7 +40,8 @@ function main(shapeBufferInfo, shapeUniforms, index) {
     matrix = m4.xRotate(matrix, xRotation);
     matrix = m4.yRotate(matrix, yRotation);
     matrix = m4.zRotate(matrix, zRotation);
-   
+    matrix = p3Rotation === 0 && p2Rotation === 0 && p1Rotation === 0 ? matrix : m4.axisRotate(matrix, [p1Rotation, p2Rotation, p3Rotation], angle, matrix);
+
     return matrix
   }
 
@@ -65,9 +70,7 @@ function main(shapeBufferInfo, shapeUniforms, index) {
 
     gl.useProgram(meshProgramInfo.program);
 
-    // ------ Draw the cube --------
-
-    // Setup all the needed attributes.
+    // ------ Draw the shape --------
     gl.bindVertexArray(VAO);
 
     shapeUniforms.u_matrix = computeMatrix(
@@ -81,6 +84,10 @@ function main(shapeBufferInfo, shapeUniforms, index) {
       transformations[index].xScale['X'],
       transformations[index].yScale['Y'],
       transformations[index].zScale['Z'],
+      transformations[index].p1Rotation['X'],
+      transformations[index].p2Rotation['Y'],
+      transformations[index].p3Rotation['Z'],
+      transformations[index].angle['angle']
     );
 
     // Set the uniforms we just computed
@@ -107,6 +114,10 @@ var obj = { 'Add shape': () => {
     xScale: { 'X': 1 },
     yScale: { 'Y': 1 },
     zScale: { 'Z': 1 },
+    p1Rotation: { 'X': 0 },
+    p2Rotation: { 'Y': 0 },
+    p3Rotation: { 'Z': 0 },
+    angle: { 'angle': degToRad(0) }
   });
 
   main(
