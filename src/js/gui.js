@@ -1,11 +1,3 @@
-const zoom = { 'Zoom': 80 };
-const xCamera = { 'X': 0 };
-const yCamera = { 'Y': 0 };
-
-const xCameraRotation = { 'X': 0 };
-const yCameraRotation = { 'Y': 0 };
-const zCameraRotation = { 'Z': 0 };
-
 const p1CameraRotation = { 'X': 0 };
 const p2CameraRotation = { 'Y': 0 };
 const p3CameraRotation = { 'Z': 0 };
@@ -13,23 +5,44 @@ const cameraAngle = { 'angle': 0 };
 
 const followShape = { 'Follow Shape': false };
 
-var cameraFunctions = { 'Add camera': () => {}  };
 
 const loadCameraGui = () => {
   const gui = new dat.GUI();
 
-  gui.add(cameraFunctions, 'Add camera');
+  
   var translations = gui.addFolder('Translations');
   translations.close();
-  translations.add(xCamera, "X", -canvas.width * 2, canvas.width * 2, 1)
-  translations.add(yCamera, "Y", -canvas.width * 2, canvas.width * 2, 1)
-  translations.add(zoom, "Zoom", 0, 100, 1);
+  translations.add(cameraTransformations[Number(activeCamera['Selected Camera']) - 1].xCamera, "X", -canvas.width * 2, canvas.width * 2, 1).listen().onChange(value => {
+    cameraTransformations[Number(activeCamera['Selected Camera']) - 1].xCamera['X'] = value;
+  });
+  translations.add(cameraTransformations[Number(activeCamera['Selected Camera']) - 1].yCamera, "Y", -canvas.width * 2, canvas.width * 2, 1).listen().onChange(value => {
+    cameraTransformations[Number(activeCamera['Selected Camera']) - 1].yCamera['Y'] = value;
+  });
+  translations.add(cameraTransformations[Number(activeCamera['Selected Camera']) - 1].zoom, "Zoom", 0, 100, 1).listen().onChange(value => {
+    cameraTransformations[Number(activeCamera['Selected Camera']) - 1].zoom['Zoom'] = value;
+  });
 
   var rotations = gui.addFolder('Axis Rotations');
   rotations.close();
-  rotations.add(xCameraRotation, "X", -100, 100, 1)
-  rotations.add(yCameraRotation, "Y", -100, 100, 1)
-  rotations.add(zCameraRotation, "Z", -100, 100, 1);
+  rotations.add(cameraTransformations[Number(activeCamera['Selected Camera']) - 1].xCameraRotation, "X", -100, 100, 1).onChange(value => {
+    cameraTransformations[Number(activeCamera['Selected Camera']) - 1].xCameraRotation['X'] = value;
+  });
+  rotations.add(cameraTransformations[Number(activeCamera['Selected Camera']) - 1].yCameraRotation, "Y", -100, 100, 1).onChange(value => {
+    cameraTransformations[Number(activeCamera['Selected Camera']) - 1].yCameraRotation['Y'] = value;
+  });
+  rotations.add(cameraTransformations[Number(activeCamera['Selected Camera']) - 1].zCameraRotation, "Z", -100, 100, 1).onChange(value => {
+    cameraTransformations[Number(activeCamera['Selected Camera']) - 1].zCameraRotation['Z'] = value;
+  });
+
+  var camera = gui.addFolder('Cameras');
+  camera.close();
+  camera.add(activeCamera, "Selected Camera").listen().onFinishChange((value) => {
+    if(value <= cameras.length && value >= 1){
+      activeCamera['Selected Camera'] = value;
+    } else {
+      activeCamera['Selected Camera'] = cameras.length;
+    }
+  })
 /*
   var pointRotations = gui.addFolder('Point Rotations');
   pointRotations.open();

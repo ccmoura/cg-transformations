@@ -57,10 +57,19 @@ function main(shapeBufferInfo, shapeUniforms, index) {
     var aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
     var projectionMatrix = m4.perspective(fieldOfViewRadians, aspect, 1, 2000);
 
+    console.log(Number(activeCamera['Selected Camera']))
+    console.log(cameraTransformations[Number(activeCamera['Selected Camera']) - 1])
     // Compute the camera's matrix using look at.
-    var cameraPosition = [xCamera['X'], yCamera['Y'], (100 - zoom['Zoom']) * 10];
-    var target = [followShape['Follow Shape'] ? transformations[index].xTranslation['X'] : yCameraRotation['Y'], followShape['Follow Shape'] ? transformations[index].yTranslation['Y'] : xCameraRotation['X'], 0];
-    var up = [zCameraRotation['Z'], 1, 0];
+    var cameraPosition = [
+      cameraTransformations[Number(activeCamera['Selected Camera']) - 1].xCamera['X'], 
+      cameraTransformations[Number(activeCamera['Selected Camera']) - 1].yCamera['Y'], 
+      (100 - cameraTransformations[Number(activeCamera['Selected Camera']) - 1].zoom['Zoom']) * 10
+    ];
+    var target = [
+      followShape['Follow Shape'] ? transformations[index].xTranslation['X'] : cameraTransformations[Number(activeCamera['Selected Camera']) - 1].yCameraRotation['Y'], 
+      followShape['Follow Shape'] ? transformations[index].yTranslation['Y'] : cameraTransformations[Number(activeCamera['Selected Camera']) - 1].xCameraRotation['X'], 0
+    ];
+    var up = [cameraTransformations[Number(activeCamera['Selected Camera']) - 1].zCameraRotation['Z'], 1, 0];
     var cameraMatrix = m4.lookAt(cameraPosition, target, up);
 
     // Make a view matrix from the camera matrix.
@@ -126,7 +135,7 @@ var obj = { 'Add shape': () => {
       u_colorMult: [Math.random(), Math.random(), Math.random(), 1],
       u_matrix: m4.identity(),
     },
-    transformations.length - 1
+    transformations.length - 1,
   )
   }
 };
@@ -138,14 +147,11 @@ function sleep(ms) {
 function shuffleArray(array) {
   var currentIndex = array.length, temporaryValue, randomIndex;
 
-  // While there remain elements to shuffle...
   while (0 !== currentIndex) {
 
-    // Pick a remaining element...
     randomIndex = Math.floor(Math.random() * currentIndex);
     currentIndex -= 1;
 
-    // And swap it with the current element.
     temporaryValue = array[currentIndex];
     array[currentIndex] = array[randomIndex];
     array[randomIndex] = temporaryValue;
@@ -187,10 +193,22 @@ var animateOne = { 'Animate One': async () => {
       const value = transformations[index][t][`${Object.keys(transformations[index][t])[0]}`];
       generateSmoothedAnimation(value, Math.floor(Math.random() * (value + maxValue)) * (Math.round(Math.random()) == 0 ? 1 : -1), index, t);
     }
-
-    
   }
 }
 
+var cameraFunctions = { 'Add camera': () => {
+  cameras.push({ cameraPosition: [0, 0, 100], target: [0, 0, 0], up: [0, 1, 0] });
+  cameraTransformations.push({
+    xCamera: { 'X': 0 },
+    yCamera: { 'Y': 0 },
+    xCameraRotation: { 'X': 0 },
+    yCameraRotation: { 'Y': 0 },
+    zCameraRotation: { 'Z': 0 },
+    zoom: { 'Zoom': 80 }
+  });
+  activeCamera['Selected Camera'] = cameras.length;
+}};
+
 gui.add(obj, 'Add shape');
 gui.add(animateOne, 'Animate One');
+gui.add(cameraFunctions, 'Add camera');
