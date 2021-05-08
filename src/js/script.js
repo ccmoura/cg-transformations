@@ -25,7 +25,7 @@ function main(shapeBufferInfo, shapeUniforms, index) {
     p3Rotation,
     angle
   ) {
-    return getAllTransformations(
+    return Transformation.getAllTransformations(
       m4,
       matrix,
       [xScale, yScale, zScale],
@@ -53,7 +53,7 @@ function main(shapeBufferInfo, shapeUniforms, index) {
       2000
     );
 
-    const cameraMatrix = m4.lookAt(...getAllCameraAttributes(index));
+    const cameraMatrix = m4.lookAt(...Camera.getAllCameraAttributes(index));
 
     const viewMatrix = m4.inverse(cameraMatrix);
 

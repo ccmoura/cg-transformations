@@ -1,37 +1,63 @@
 const transformations = [];
 
-const getScale = (m4, matrix, scales) => m4.scale(matrix, ...scales);
+class Transformation {
+  static generateTransformation() {
+    transformations.push({
+      xRotation: { X: degToRad(1) },
+      yRotation: { Y: degToRad(1) },
+      zRotation: { Z: degToRad(1) },
+      xTranslation: { X: degToRad(1) },
+      yTranslation: { Y: degToRad(1) },
+      zTranslation: { Z: degToRad(1) },
+      xScale: { X: 1 },
+      yScale: { Y: 1 },
+      zScale: { Z: 1 },
+      p1Rotation: { X: 0 },
+      p2Rotation: { Y: 0 },
+      p3Rotation: { Z: 0 },
+      angle: { angle: degToRad(0) },
+    });
+  }
 
-const getRotation = (m4, matrix, rotations) => {
-  matrix = m4.xRotate(matrix, rotations[0]);
-  matrix = m4.yRotate(matrix, rotations[1]);
-  return m4.zRotate(matrix, rotations[2]);
-};
+  static getScale(m4, matrix, scales) {
+    return m4.scale(matrix, ...scales);
+  }
 
-const getTranslation = (m4, matrix, translations) =>
-  m4.translate(matrix, ...translations);
+  static getRotation(m4, matrix, rotations) {
+    matrix = m4.xRotate(matrix, rotations[0]);
+    matrix = m4.yRotate(matrix, rotations[1]);
+    return m4.zRotate(matrix, rotations[2]);
+  }
 
-const getPointRotation = (m4, matrix, pointRotations, angle) =>
-  pointRotations[2] === 0 && pointRotations[1] === 0 && pointRotations[0] === 0
-    ? matrix
-    : m4.axisRotate(
-        matrix,
-        [pointRotations[0], pointRotations[1], pointRotations[2]],
-        angle,
-        matrix
-      );
+  static getTranslation(m4, matrix, translations) {
+    return m4.translate(matrix, ...translations);
+  }
 
-const getAllTransformations = (
-  m4,
-  matrix,
-  scales,
-  rotations,
-  pointRotations,
-  translations,
-  angle
-) => {
-  matrix = getScale(m4, matrix, scales);
-  matrix = getRotation(m4, matrix, rotations);
-  matrix = getPointRotation(m4, matrix, pointRotations, angle);
-  return getTranslation(m4, matrix, translations);
-};
+  static getPointRotation(m4, matrix, pointRotations, angle) {
+    return pointRotations[2] === 0 &&
+      pointRotations[1] === 0 &&
+      pointRotations[0] === 0
+      ? matrix
+      : m4.axisRotate(
+          matrix,
+          [pointRotations[0], pointRotations[1], pointRotations[2]],
+          angle,
+          matrix
+        );
+  }
+
+  static getAllTransformations(
+    m4,
+    matrix,
+    scales,
+    rotations,
+    pointRotations,
+    translations,
+    angle
+  ) {
+    matrix = this.getScale(m4, matrix, scales);
+    matrix = this.getRotation(m4, matrix, rotations);
+    matrix = this.getPointRotation(m4, matrix, pointRotations, angle);
+    return this.getTranslation(m4, matrix, translations);
+  }
+}
