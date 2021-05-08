@@ -52,6 +52,121 @@ const loadCameraGui = () => {
       ].zoom.Zoom = value;
     });
 
+  const bezierCamera = gui.addFolder("Bezier Curve Translations");
+
+  bezierCamera.close();
+
+  bezierCamera
+    .add(
+      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+        .p1XBezier,
+      "X",
+      -canvas.width * 2,
+      canvas.width * 2,
+      1
+    )
+    .listen()
+    .onChange((value) => {
+      cameraTransformations[
+        Number(activeCamera["Selected Camera"]) - 1
+      ].p1XBezier.X = value;
+    });
+
+  bezierCamera
+    .add(
+      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+        .p1YBezier,
+      "Y",
+      -canvas.width * 2,
+      canvas.width * 2,
+      1
+    )
+    .listen()
+    .onChange((value) => {
+      cameraTransformations[
+        Number(activeCamera["Selected Camera"]) - 1
+      ].p1YBezier.Y = value;
+    });
+
+  bezierCamera
+    .add(
+      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+        .p1ZBezier,
+      "Z",
+      -canvas.width * 2,
+      canvas.width * 2,
+      1
+    )
+    .listen()
+    .onChange((value) => {
+      cameraTransformations[
+        Number(activeCamera["Selected Camera"]) - 1
+      ].p1ZBezier.Z = value;
+    });
+  bezierCamera
+    .add(
+      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+        .p2XBezier,
+      "X",
+      -canvas.width * 2,
+      canvas.width * 2,
+      1
+    )
+    .listen()
+    .onChange((value) => {
+      cameraTransformations[
+        Number(activeCamera["Selected Camera"]) - 1
+      ].p2XBezier.X = value;
+    });
+
+  bezierCamera
+    .add(
+      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+        .p2YBezier,
+      "Y",
+      -canvas.width * 2,
+      canvas.width * 2,
+      1
+    )
+    .listen()
+    .onChange((value) => {
+      cameraTransformations[
+        Number(activeCamera["Selected Camera"]) - 1
+      ].p2YBezier.Y = value;
+    });
+
+  bezierCamera
+    .add(
+      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+        .p2ZBezier,
+      "Z",
+      -canvas.width * 2,
+      canvas.width * 2,
+      1
+    )
+    .listen()
+    .onChange((value) => {
+      cameraTransformations[
+        Number(activeCamera["Selected Camera"]) - 1
+      ].p2ZBezier.Z = value;
+    });
+
+  bezierCamera
+    .add(
+      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+        .tBezier,
+      "t",
+      0,
+      1,
+      0.01
+    )
+    .listen()
+    .onChange((value) => {
+      cameraTransformations[
+        Number(activeCamera["Selected Camera"]) - 1
+      ].tBezier.t = value;
+    });
+
   const rotations = gui.addFolder("Axis Rotations");
 
   rotations.close();
@@ -182,7 +297,7 @@ const loadGUI = (index) => {
 
   const bezierTranslations = gui.addFolder("Bezier Curve Translations");
 
-  bezierTranslations.open();
+  bezierTranslations.close();
 
   bezierTranslations.add(
     transformations[index].p1XBezier,

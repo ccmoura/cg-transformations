@@ -16,6 +16,13 @@ const cameraTransformations = [
     yCameraRotation: { Y: 0 },
     zCameraRotation: { Z: 0 },
     zoom: { Zoom: 80 },
+    p1XBezier: { X: 0 },
+    p1YBezier: { Y: 0 },
+    p1ZBezier: { Z: 0 },
+    p2XBezier: { X: 0 },
+    p2YBezier: { Y: 0 },
+    p2ZBezier: { Z: 0 },
+    tBezier: { t: 0 },
   },
 ];
 
@@ -39,17 +46,46 @@ const cameraFunctions = {
 };
 
 class Camera {
+  static getCameraBezier(source, p1Bezier, p2Bezier, t) {
+    return source.map(
+      (initialPoint, i) =>
+        (1 - t) ** 2 * initialPoint +
+        2 * t * (1 - t) * p1Bezier[i] +
+        t ** 2 * p2Bezier[i]
+    );
+  }
+
   static getPosition() {
-    return [
-      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1].xCamera
-        .X,
-      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1].yCamera
-        .Y,
-      (100 -
-        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1].zoom
-          .Zoom) *
-        10,
-    ];
+    return this.getCameraBezier(
+      [
+        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+          .xCamera.X,
+        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+          .yCamera.Y,
+        (100 -
+          cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+            .zoom.Zoom) *
+          10,
+      ],
+      [
+        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+          .p1XBezier.X,
+        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+          .p1YBezier.Y,
+        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+          .p1ZBezier.Z,
+      ],
+      [
+        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+          .p2XBezier.X,
+        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+          .p2YBezier.Y,
+        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+          .p2ZBezier.Z,
+      ],
+      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1].tBezier
+        .t
+    );
   }
 
   static getTarget(index) {
