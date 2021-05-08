@@ -23,6 +23,13 @@ function main(shapeBufferInfo, shapeUniforms, index) {
     p1Rotation,
     p2Rotation,
     p3Rotation,
+    p1XBezier,
+    p1YBezier,
+    p1ZBezier,
+    p2XBezier,
+    p2YBezier,
+    p2ZBezier,
+    t,
     angle
   ) {
     return Transformation.getAllTransformations(
@@ -32,7 +39,11 @@ function main(shapeBufferInfo, shapeUniforms, index) {
       [xRotation, yRotation, zRotation],
       [p1Rotation, p2Rotation, p3Rotation],
       [xTranslation, yTranslation, zTranslation],
-      angle
+      [p1XBezier, p1YBezier, p1ZBezier],
+      [p2XBezier, p2YBezier, p2ZBezier],
+      t,
+      angle,
+      index
     );
   }
 
@@ -77,6 +88,13 @@ function main(shapeBufferInfo, shapeUniforms, index) {
       transformations[index].p1Rotation.X,
       transformations[index].p2Rotation.Y,
       transformations[index].p3Rotation.Z,
+      transformations[index].p1XBezier,
+      transformations[index].p1YBezier,
+      transformations[index].p1ZBezier,
+      transformations[index].p2XBezier,
+      transformations[index].p2YBezier,
+      transformations[index].p2ZBezier,
+      transformations[index].tBezier,
       transformations[index].angle.angle
     );
 

@@ -78,4 +78,51 @@ class Camera {
   static getAllCameraAttributes(index) {
     return [this.getPosition(), this.getTarget(index), this.getUp()];
   }
+
+  static async generateSmoothedAnimation(actual, target, index, t, v) {
+    let x;
+    let y;
+    if (actual < target) {
+      x = Math.floor(actual);
+      y = Math.floor(target);
+    } else {
+      x = Math.floor(target);
+      y = Math.floor(actual);
+    }
+
+    while (x !== y) {
+      await Animation.sleep(10);
+      cameras[index][t][v] = x;
+      x += 0.01;
+    }
+  }
 }
+
+const animateCamera = {
+  "Animate Camera": async () => {
+    const maxValue = 15;
+    const index = Math.floor(Math.random() * cameras.length);
+
+    for (const t of Object.keys(
+      Animation.shuffleArray(
+        cameras.map((camera) => ({
+          cameraPosition: camera.cameraPosition,
+          target: camera.target,
+        }))
+      )[index]
+    )) {
+      for (const v in cameras[index][t]) {
+        await Animation.sleep(300);
+        const value = cameras[index][t][v];
+        Camera.generateSmoothedAnimation(
+          value,
+          Math.floor(Math.random() * (value + maxValue)) *
+            (Math.round(Math.random()) === 0 ? 1 : -1),
+          index,
+          t,
+          v
+        );
+      }
+    }
+  },
+};

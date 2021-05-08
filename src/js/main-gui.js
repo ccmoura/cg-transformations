@@ -18,4 +18,5 @@ const loadMainGUI = () => {
   gui.add(addShape, "Add Shape");
   gui.add(animateOne, "Animate One");
   gui.add(cameraFunctions, "Add Camera");
+  gui.add(animateCamera, "Animate Camera");
 };

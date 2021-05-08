@@ -180,6 +180,60 @@ const loadGUI = (index) => {
 
   translations.add(transformations[index].zTranslation, "Z", -100, 100, 0.5);
 
+  const bezierTranslations = gui.addFolder("Bezier Curve Translations");
+
+  bezierTranslations.open();
+
+  bezierTranslations.add(
+    transformations[index].p1XBezier,
+    "X",
+    -canvas.width * 2,
+    canvas.width * 2,
+    1
+  );
+
+  bezierTranslations.add(
+    transformations[index].p1YBezier,
+    "Y",
+    -canvas.height * 2,
+    canvas.height * 2,
+    1
+  );
+
+  bezierTranslations.add(
+    transformations[index].p1ZBezier,
+    "Z",
+    -canvas.height * 2,
+    canvas.height * 2,
+    1
+  );
+
+  bezierTranslations.add(
+    transformations[index].p2XBezier,
+    "X",
+    -canvas.width * 2,
+    canvas.width * 2,
+    2
+  );
+
+  bezierTranslations.add(
+    transformations[index].p2YBezier,
+    "Y",
+    -canvas.height * 2,
+    canvas.height * 2,
+    1
+  );
+
+  bezierTranslations.add(
+    transformations[index].p2ZBezier,
+    "Z",
+    -canvas.height * 2,
+    canvas.height * 2,
+    1
+  );
+
+  bezierTranslations.add(transformations[index].tBezier, "t", 0, 1, 0.01);
+
   const scales = gui.addFolder("Scales");
 
   scales.close();

@@ -20,6 +20,7 @@
       "no-param-reassign": "off",
       "no-await-in-loop": "off",
       "no-restricted-syntax": "off",
-      "consistent-return": "off"
+      "consistent-return": "off",
+      "guard-for-in": "off"
     }
 }
