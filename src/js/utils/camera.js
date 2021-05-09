@@ -26,27 +26,11 @@ const cameraTransformations = [
   },
 ];
 
-const cameraFunctions = {
-  "Add Camera": () => {
-    cameras.push({
-      cameraPosition: [0, 0, 100],
-      target: [0, 0, 0],
-      up: [0, 1, 0],
-    });
-    cameraTransformations.push({
-      xCamera: { X: 0 },
-      yCamera: { Y: 0 },
-      xCameraRotation: { X: 0 },
-      yCameraRotation: { Y: 0 },
-      zCameraRotation: { Z: 0 },
-      zoom: { Zoom: 80 },
-    });
-    activeCamera["Selected Camera"] = cameras.length;
-  },
-};
-
 class Camera {
   static getCameraBezier(source, p1Bezier, p2Bezier, t) {
+    if (t > 1) t = 1;
+    if (t < 0) t = 0;
+
     return source.map(
       (initialPoint, i) =>
         (1 - t) ** 2 * initialPoint +
@@ -56,49 +40,39 @@ class Camera {
   }
 
   static getPosition() {
+    const cameraIndex = Number(activeCamera["Selected Camera"]) - 1;
     return this.getCameraBezier(
       [
-        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
-          .xCamera.X,
-        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
-          .yCamera.Y,
-        (100 -
-          cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
-            .zoom.Zoom) *
-          10,
+        cameraTransformations[cameraIndex].xCamera.X,
+        cameraTransformations[cameraIndex].yCamera.Y,
+        (100 - cameraTransformations[cameraIndex].zoom.Zoom) * 10,
       ],
       [
-        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
-          .p1XBezier.X,
-        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
-          .p1YBezier.Y,
-        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
-          .p1ZBezier.Z,
+        cameraTransformations[cameraIndex].p1XBezier.X,
+        cameraTransformations[cameraIndex].p1YBezier.Y,
+        cameraTransformations[cameraIndex].p1ZBezier.Z,
       ],
       [
-        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
-          .p2XBezier.X,
-        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
-          .p2YBezier.Y,
-        cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
-          .p2ZBezier.Z,
+        cameraTransformations[cameraIndex].p2XBezier.X,
+        cameraTransformations[cameraIndex].p2YBezier.Y,
+        cameraTransformations[cameraIndex].p2ZBezier.Z,
       ],
-      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1].tBezier
-        .t
+      cameraTransformations[cameraIndex].tBezier.t
     );
   }
 
   static getTarget(index) {
+    const cameraIndex = Number(activeCamera["Selected Camera"]) - 1;
     return [
       followShape["Follow Shape"]
         ? transformations[index].xTranslation.X
-        : cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
-            .yCameraRotation.Y,
+        : cameraTransformations[cameraIndex].yCameraRotation.Y,
       followShape["Follow Shape"]
         ? transformations[index].yTranslation.Y
-        : cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
-            .xCameraRotation.X,
-      0,
+        : cameraTransformations[cameraIndex].xCameraRotation.X,
+      followShape["Follow Shape"]
+        ? transformations[index].zTranslation.Z
+        : cameraTransformations[cameraIndex].zCameraRotation.Z,
     ];
   }
 
@@ -134,7 +108,30 @@ class Camera {
   }
 }
 
-const animateCamera = {
+const cameraFunctions = {
+  "Add Camera": () => {
+    cameras.push({
+      cameraPosition: [0, 0, 100],
+      target: [0, 0, 0],
+      up: [0, 1, 0],
+    });
+    cameraTransformations.push({
+      xCamera: { X: 0 },
+      yCamera: { Y: 0 },
+      xCameraRotation: { X: 0 },
+      yCameraRotation: { Y: 0 },
+      zCameraRotation: { Z: 0 },
+      zoom: { Zoom: 80 },
+      p1XBezier: { X: 0 },
+      p1YBezier: { Y: 0 },
+      p1ZBezier: { Z: 0 },
+      p2XBezier: { X: 0 },
+      p2YBezier: { Y: 0 },
+      p2ZBezier: { Z: 0 },
+      tBezier: { t: 0 },
+    });
+    activeCamera["Selected Camera"] = cameras.length;
+  },
   "Animate Camera": async () => {
     const maxValue = 15;
     const index = Math.floor(Math.random() * cameras.length);

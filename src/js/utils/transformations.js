@@ -68,6 +68,8 @@ class Transformation {
     p2Bezier[2] = p2Bezier[2].Z;
 
     t = t.t;
+    if (t > 1) t = 1;
+    if (t < 0) t = 0;
 
     return m4.translate(
       matrix,

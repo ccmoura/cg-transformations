@@ -1,3 +1,6 @@
+const canvasSizeWidth = [-canvas.width * 2, canvas.width * 2];
+const canvasSizeHeight = [-canvas.height * 2, canvas.height * 2];
+
 const loadCameraGui = () => {
   const gui = new dat.GUI();
 
@@ -10,8 +13,7 @@ const loadCameraGui = () => {
       cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
         .xCamera,
       "X",
-      -canvas.width * 2,
-      canvas.width * 2,
+      ...canvasSizeWidth,
       1
     )
     .listen()
@@ -26,8 +28,7 @@ const loadCameraGui = () => {
       cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
         .yCamera,
       "Y",
-      -canvas.width * 2,
-      canvas.width * 2,
+      ...canvasSizeWidth,
       1
     )
     .listen()
@@ -61,8 +62,7 @@ const loadCameraGui = () => {
       cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
         .p1XBezier,
       "X",
-      -canvas.width * 2,
-      canvas.width * 2,
+      ...canvasSizeWidth,
       1
     )
     .listen()
@@ -77,8 +77,7 @@ const loadCameraGui = () => {
       cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
         .p1YBezier,
       "Y",
-      -canvas.width * 2,
-      canvas.width * 2,
+      ...canvasSizeWidth,
       1
     )
     .listen()
@@ -93,8 +92,7 @@ const loadCameraGui = () => {
       cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
         .p1ZBezier,
       "Z",
-      -canvas.width * 2,
-      canvas.width * 2,
+      ...canvasSizeWidth,
       1
     )
     .listen()
@@ -108,8 +106,7 @@ const loadCameraGui = () => {
       cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
         .p2XBezier,
       "X",
-      -canvas.width * 2,
-      canvas.width * 2,
+      ...canvasSizeWidth,
       1
     )
     .listen()
@@ -124,8 +121,7 @@ const loadCameraGui = () => {
       cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
         .p2YBezier,
       "Y",
-      -canvas.width * 2,
-      canvas.width * 2,
+      ...canvasSizeWidth,
       1
     )
     .listen()
@@ -140,8 +136,7 @@ const loadCameraGui = () => {
       cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
         .p2ZBezier,
       "Z",
-      -canvas.width * 2,
-      canvas.width * 2,
+      ...canvasSizeWidth,
       1
     )
     .listen()
@@ -230,22 +225,6 @@ const loadCameraGui = () => {
         activeCamera["Selected Camera"] = cameras.length;
       }
     });
-
-  /*
-
-  var pointRotations = gui.addFolder('Point Rotations');
-
-  pointRotations.open();
-
-  pointRotations.add(p1CameraRotation, "X", -100, 100, 1);
-
-  pointRotations.add(p2CameraRotation, "Y", -100, 100, 1);
-
-  pointRotations.add(p3CameraRotation, "Z", -100, 100, 1);
-
-  pointRotations.add(cameraAngle, "angle", 0, 100, 1);
-
-  */
 };
 
 const loadGUI = (index) => {
@@ -280,16 +259,14 @@ const loadGUI = (index) => {
   translations.add(
     transformations[index].xTranslation,
     "X",
-    -canvas.width * 2,
-    canvas.width * 2,
+    ...canvasSizeWidth,
     1
   );
 
   translations.add(
     transformations[index].yTranslation,
     "Y",
-    -canvas.height * 2,
-    canvas.height * 2,
+    ...canvasSizeHeight,
     1
   );
 
@@ -302,48 +279,42 @@ const loadGUI = (index) => {
   bezierTranslations.add(
     transformations[index].p1XBezier,
     "X",
-    -canvas.width * 2,
-    canvas.width * 2,
+    ...canvasSizeWidth,
     1
   );
 
   bezierTranslations.add(
     transformations[index].p1YBezier,
     "Y",
-    -canvas.height * 2,
-    canvas.height * 2,
+    ...canvasSizeHeight,
     1
   );
 
   bezierTranslations.add(
     transformations[index].p1ZBezier,
     "Z",
-    -canvas.height * 2,
-    canvas.height * 2,
+    ...canvasSizeHeight,
     1
   );
 
   bezierTranslations.add(
     transformations[index].p2XBezier,
     "X",
-    -canvas.width * 2,
-    canvas.width * 2,
+    ...canvasSizeWidth,
     2
   );
 
   bezierTranslations.add(
     transformations[index].p2YBezier,
     "Y",
-    -canvas.height * 2,
-    canvas.height * 2,
+    ...canvasSizeHeight,
     1
   );
 
   bezierTranslations.add(
     transformations[index].p2ZBezier,
     "Z",
-    -canvas.height * 2,
-    canvas.height * 2,
+    ...canvasSizeHeight,
     1
   );
 
@@ -362,9 +333,15 @@ const loadGUI = (index) => {
   gui.add(
     {
       "Look At": () => {
-        xCameraRotation.X = transformations[index].yTranslation.Y;
+        const cameraIndex = Number(activeCamera["Selected Camera"]) - 1;
+        cameraTransformations[cameraIndex].xCameraRotation.X =
+          transformations[index].yTranslation.Y;
 
-        yCameraRotation.Y = transformations[index].xTranslation.X;
+        cameraTransformations[cameraIndex].yCameraRotation.Y =
+          transformations[index].xTranslation.X;
+
+        cameraTransformations[cameraIndex].zCameraRotation.Z =
+          transformations[index].zTranslation.Z;
       },
     },
     "Look At"

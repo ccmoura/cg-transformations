@@ -9,3 +9,17 @@ class Shape {
     return shapes[Math.floor(Math.random() * shapes.length)];
   }
 }
+
+const addShape = {
+  "Add Shape": () => {
+    Transformation.generateTransformation();
+    main(
+      Shape.generateShape(gl),
+      {
+        u_colorMult: [Math.random(), Math.random(), Math.random(), 1],
+        u_matrix: m4.identity(),
+      },
+      transformations.length - 1
+    );
+  },
+};
