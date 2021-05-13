@@ -211,6 +211,70 @@ const loadCameraGui = () => {
       ].zCameraRotation.Z = value;
     });
 
+  const pointRotations = gui.addFolder("Point Rotations");
+
+  pointRotations.close();
+
+  pointRotations
+    .add(
+      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+        .xCameraPointRotation,
+      "X",
+      -100,
+      100,
+      1
+    )
+    .onChange((value) => {
+      cameraTransformations[
+        Number(activeCamera["Selected Camera"]) - 1
+      ].xCameraPointRotation.X = value;
+    });
+
+  pointRotations
+    .add(
+      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+        .yCameraPointRotation,
+      "Y",
+      -100,
+      100,
+      1
+    )
+    .onChange((value) => {
+      cameraTransformations[
+        Number(activeCamera["Selected Camera"]) - 1
+      ].yCameraPointRotation.Y = value;
+    });
+
+  pointRotations
+    .add(
+      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+        .zCameraPointRotation,
+      "Z",
+      -100,
+      100,
+      1
+    )
+    .onChange((value) => {
+      cameraTransformations[
+        Number(activeCamera["Selected Camera"]) - 1
+      ].zCameraPointRotation.Z = value;
+    });
+
+  pointRotations
+    .add(
+      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1]
+        .cameraPointRotationAngle,
+      "angle",
+      -100,
+      100,
+      1
+    )
+    .onChange((value) => {
+      cameraTransformations[
+        Number(activeCamera["Selected Camera"]) - 1
+      ].cameraPointRotationAngle.angle = value;
+    });
+
   const camera = gui.addFolder("Cameras");
 
   camera.close();

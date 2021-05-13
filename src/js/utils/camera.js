@@ -3,10 +3,6 @@ const cameras = [
 ];
 const activeCamera = { "Selected Camera": "1" };
 const followShape = { "Follow Shape": false };
-const p1CameraRotation = { X: 0 };
-const p2CameraRotation = { Y: 0 };
-const p3CameraRotation = { Z: 0 };
-const cameraAngle = { angle: 0 };
 
 const cameraTransformations = [
   {
@@ -15,6 +11,10 @@ const cameraTransformations = [
     xCameraRotation: { X: 0 },
     yCameraRotation: { Y: 0 },
     zCameraRotation: { Z: 0 },
+    xCameraPointRotation: { X: 1 },
+    yCameraPointRotation: { Y: 1 },
+    zCameraPointRotation: { Z: 1 },
+    cameraPointRotationAngle: { angle: 0 },
     zoom: { Zoom: 80 },
     p1XBezier: { X: 0 },
     p1YBezier: { Y: 0 },
@@ -121,6 +121,10 @@ const cameraFunctions = {
       xCameraRotation: { X: 0 },
       yCameraRotation: { Y: 0 },
       zCameraRotation: { Z: 0 },
+      xCameraPointRotation: { X: 1 },
+      yCameraPointRotation: { Y: 1 },
+      zCameraPointRotation: { Z: 1 },
+      cameraPointRotationAngle: { angle: 0 },
       zoom: { Zoom: 80 },
       p1XBezier: { X: 0 },
       p1YBezier: { Y: 0 },

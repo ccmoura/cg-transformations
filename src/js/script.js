@@ -66,7 +66,15 @@ function main(shapeBufferInfo, shapeUniforms, index) {
 
     const cameraMatrix = m4.lookAt(...Camera.getAllCameraAttributes(index));
 
-    const viewMatrix = m4.inverse(cameraMatrix);
+    const pointRotatedCamera = m4.axisRotate(
+      cameraMatrix,
+      [cameraTransformations[Number(activeCamera["Selected Camera"]) - 1].xCameraPointRotation.X, 
+      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1].yCameraPointRotation.Y, 
+      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1].zCameraPointRotation.Z], 
+      cameraTransformations[Number(activeCamera["Selected Camera"]) - 1].cameraPointRotationAngle.angle,
+      cameraMatrix);
+
+    const viewMatrix = m4.inverse(pointRotatedCamera);
 
     const viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
 
